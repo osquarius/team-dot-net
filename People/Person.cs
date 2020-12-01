@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Team.People
 {
-    public abstract class Person
+    public abstract class Person : ICloneable
     {
         private const string DEFAULT_FIRST_NAME = "John";
         private const string DEFAULT_LAST_NAME = "Doe";
@@ -42,7 +42,7 @@ namespace Team.People
             }
         }
 
-        private Gender gender;
+        protected Gender gender;
         public string GenderName
         {
             get
@@ -74,6 +74,8 @@ namespace Team.People
             this.pesel = pesel;
             this.gender = gender;
         }
+
+        public abstract object Clone();
 
         public int Age()
         {

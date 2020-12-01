@@ -95,6 +95,81 @@ namespace Team
             team.AddMember(fourthMember);
             team.AddMember(fifthMember);
             Console.WriteLine(team);
+
+            Console.WriteLine($"Zespół ma {team.MemberCount} członków");
+            Console.WriteLine(
+                "Czy osoba o peselu 91072235964 jest członkiem zespołu? {0}",
+                team.HasMember("91072235964")
+            );
+            Console.WriteLine(
+                "Czy osoba o peselu 01234567890 jest członkiem zespołu? {0}",
+                team.HasMember("01234567890")
+            );
+            Console.WriteLine(
+                "Czy Witold Adamski jest członkiem zespołu? {0}",
+                team.HasMember("Witold", "Adamski")
+            );
+            Console.WriteLine(
+                "Czy Adam Witoldski jest członkiem zespołu? {0}",
+                team.HasMember("Adam", "Witoldski")
+            );
+
+            Console.WriteLine("\nProgramiści w zespole:");
+            foreach(var programmer in team.FindMembers("programista"))
+                Console.WriteLine(programmer);
+
+            Console.WriteLine("\nW styczniu dołączyli:");
+            foreach(var person in team.FindMembers(1))
+                Console.WriteLine(person);
+
+            Console.WriteLine("\nKlonujemy kierownika");
+            var clonedManager = manager.Clone() as Manager;
+            Console.WriteLine("Zmieniamy imię klonowi na \"Adaś\"");
+            clonedManager.FirstName = "Adaś";
+            Console.WriteLine("Zmiana imienia klona nie zmienia oryginału:");
+            Console.WriteLine($"Oryginał: {manager}");
+            Console.WriteLine($"Klon: {clonedManager}");
+
+            Console.WriteLine("\nTeraz klonujemy cały zespół");
+            var clonedTeam = team.Clone() as Team;
+            Console.WriteLine("W sklonowanym zespole zmieniamy nazwę i kierownika");
+            var secondManager = new Manager(
+                "Rafał",
+                "Marzec",
+                "21.03.1988",
+                "88032112357",
+                Gender.Male
+            );
+            clonedTeam.CurrentManager = secondManager;
+            clonedTeam.Name = "NowaGrupa";
+            Console.WriteLine("Zmiany wpłynęły tylko na sklonowany zespół:");
+            Console.WriteLine(team);
+            Console.WriteLine(clonedTeam);
+
+            Console.WriteLine("\nUkładamy wizytówki członków zespołu alfabetycznie");
+            team.SortAlphabetically();
+            Console.WriteLine(team);
+
+            Console.WriteLine("\nZ zespołu odchodzi osoba o peselu 91072235964");
+            team.RemoveMember("91072235964");
+            Console.WriteLine(
+                "Czy osoba o peselu 91072235964 dalej jest członkiem zespołu? {0}",
+                team.HasMember("91072235964")
+            );
+            Console.WriteLine($"Liczba członków się zmniejszyła i wynosi {team.MemberCount}");
+            Console.WriteLine("Z zespołu odchodzi Witold Adamski");
+            team.RemoveMember("Witold", "Adamski");
+            Console.WriteLine(
+                "Czy Witold Adamski dalej jest członkiem zespołu? {0}",
+                team.HasMember("Witold", "Adamski")
+            );
+            Console.WriteLine($"Liczba członków ponownie się zmniejszyła i wynosi {team.MemberCount}");
+
+            Console.WriteLine("\nRozwiązujemy zespół");
+            team.RemoveAllMembers();
+            Console.WriteLine($"Liczba członków wynosi: {team.MemberCount}");
+            Console.WriteLine("Rzeczywiście, został tylko kierownik:\n");
+            Console.WriteLine(team);
         }
 
     }

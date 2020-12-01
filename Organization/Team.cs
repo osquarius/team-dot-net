@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -6,14 +7,13 @@ using Team.People;
 
 namespace Team.Organization
 {
-    public class Team
+    public class Team : ICloneable
     {
-        private int memberCount;
         public int MemberCount
         {
             get
             {
-                return memberCount;
+                return members.Count;
             }
         }
 
@@ -26,13 +26,16 @@ namespace Team.Organization
             {
                 return manager;
             }
+            set
+            {
+                manager = value;
+            }
         }
 
         private List<Member> members;
 
         public Team()
         {
-            memberCount = 0;
             Name = null;
             manager = null;
             members = new List<Member>();
@@ -48,7 +51,6 @@ namespace Team.Organization
         public void AddMember(Member member)
         {
             members.Add(member);
-            memberCount++;
         }
 
         public bool HasMember(string pesel)
@@ -68,7 +70,7 @@ namespace Team.Organization
             members.RemoveAll(member => member.Pesel == pesel);
         }
 
-        public void RemoveMembers(string firstName, string lastName)
+        public void RemoveMember(string firstName, string lastName)
         {
             members.RemoveAll(
                 member => (member.FirstName == firstName && member.LastName == lastName)
@@ -78,16 +80,40 @@ namespace Team.Organization
         public void RemoveAllMembers()
         {
             members.Clear();
-            memberCount = 0;
+        }
+
+        public List<Member> FindMembers(string position)
+        {
+            return members.FindAll(
+                member => member.Position == position
+            );
+        }
+
+        public List<Member> FindMembers(int monthNumber)
+        {
+            return members.FindAll(
+                member => member.RegistrationDate.Month == monthNumber
+            );
+        }
+
+        public void SortAlphabetically()
+        {
+            members.Sort();
+        }
+
+        public object Clone()
+        {
+            var clone = new Team(Name, CurrentManager.Clone() as Manager);
+            foreach(var member in members)
+                clone.AddMember(member.Clone() as Member);
+            return clone;
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder($"Zespół \"{Name}\"\n");
             builder.AppendLine(manager.ToString());
-            builder.AppendLine();
-            foreach(var member in members)
-                builder.AppendLine(member.ToString());
+            builder.AppendJoin("\n", members);
             return builder.ToString();
         }
     }

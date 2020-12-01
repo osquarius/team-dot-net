@@ -30,6 +30,18 @@ namespace Team.People
             this.experience = experience;
         }
 
+        public override object Clone()
+        {
+            return new Manager(
+                FirstName,
+                LastName,
+                Birthdate.ToString("d"),
+                Pesel,
+                gender,
+                experience
+            );
+        }
+
         public override string ToString()
         {
             var basicInfo = base.ToString();
