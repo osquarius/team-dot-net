@@ -113,6 +113,12 @@ namespace Team
                 "Czy Adam Witoldski jest członkiem zespołu? {0}",
                 team.HasMember("Adam", "Witoldski")
             );
+            Console.WriteLine("\nKlonujemy Jana Janowskiego");
+            var clonedMember = secondMember.Clone() as Member;
+            Console.WriteLine(
+                "Czy klon jest członkiem zespołu, skoro ma taki sam pesel? {0}",
+                team.HasMember(clonedMember)
+            );
 
             Console.WriteLine("\nProgramiści w zespole:");
             foreach(var programmer in team.FindMembers("programista"))
@@ -150,6 +156,25 @@ namespace Team
             team.SortAlphabetically();
             Console.WriteLine(team);
 
+            Console.WriteLine("\nW sklonowanym zespole wizytówki układamy według numerów PESEL");
+            clonedTeam.SortByPesel();
+            Console.WriteLine(clonedTeam);
+
+            Console.WriteLine("\nZapisujemy zespół do pliku binarnego");
+            team.WriteBinary("zespol.bin");
+
+            Console.WriteLine("\nOdczytujemy zespół z pliku do nowego obiektu:");
+            var binTeam = new Team();
+            binTeam.ReadBinary("zespol.bin");
+            Console.WriteLine(binTeam);
+            Console.WriteLine("\nZmiana w obiekcie odczytanym z pliku nie wpływa na oryginał:");
+            binTeam.Name = "WczytanyZespół";
+            Console.WriteLine(team);
+            Console.WriteLine(binTeam);
+
+            Console.WriteLine("\nZapisujemy zespół do pliku XML");
+            team.WriteXml("zespol.xml");
+
             Console.WriteLine("\nZ zespołu odchodzi osoba o peselu 91072235964");
             team.RemoveMember("91072235964");
             Console.WriteLine(
@@ -168,7 +193,7 @@ namespace Team
             Console.WriteLine("\nRozwiązujemy zespół");
             team.RemoveAllMembers();
             Console.WriteLine($"Liczba członków wynosi: {team.MemberCount}");
-            Console.WriteLine("Rzeczywiście, został tylko kierownik:\n");
+            Console.WriteLine("Rzeczywiście, został tylko kierownik:");
             Console.WriteLine(team);
         }
 

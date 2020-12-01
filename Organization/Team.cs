@@ -1,14 +1,27 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using Team.People;
+using Team.Utils;
 
 namespace Team.Organization
 {
-    public class Team : ICloneable
+    [Serializable]
+    public class Team : ICloneable, IWritable
     {
+        private class PeselComparator : IComparer<Member>
+        {
+            public int Compare(Member lhs, Member rhs)
+            {
+                return lhs.Pesel.CompareTo(rhs.Pesel);
+            }
+        };
+
         public int MemberCount
         {
             get
@@ -32,6 +45,7 @@ namespace Team.Organization
             }
         }
 
+        [XmlArray]
         private List<Member> members;
 
         public Team()
@@ -62,6 +76,13 @@ namespace Team.Organization
         {
             return members.Any(
                 member => (member.FirstName == firstName && member.LastName == lastName)
+            );
+        }
+
+        public bool HasMember(Member potentialMember)
+        {
+            return members.Any(
+                member => (member.Equals(potentialMember))
             );
         }
 
@@ -101,12 +122,52 @@ namespace Team.Organization
             members.Sort();
         }
 
+        public void SortByPesel()
+        {
+            members.Sort(new PeselComparator());
+        }
+
         public object Clone()
         {
             var clone = new Team(Name, CurrentManager.Clone() as Manager);
             foreach(var member in members)
                 clone.AddMember(member.Clone() as Member);
             return clone;
+        }
+
+        public void WriteBinary(string filename)
+        {
+            using(var stream = new FileStream(filename, FileMode.Create))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+            }
+        }
+
+        public void ReadBinary(string filename)
+        {
+            Team data = null;
+            using(var stream = new FileStream(filename, FileMode.Open))
+            {
+                var formatter = new BinaryFormatter();
+                data = (Team)formatter.Deserialize(stream);
+            }
+            Name = data.Name;
+            CurrentManager = data.CurrentManager;
+            members = data.members;
+        }
+
+        public void WriteXml(string filename)
+        {
+            using(var writer = new StreamWriter(filename))
+            {
+                var serializer = new XmlSerializer(this.GetType());
+                serializer.Serialize(writer, this);
+            }
+        }
+
+        public void ReadXml(string filename)
+        {
         }
 
         public override string ToString()

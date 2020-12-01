@@ -3,7 +3,8 @@ using System.Globalization;
 
 namespace Team.People
 {
-    public abstract class Person : ICloneable
+    [Serializable]
+    public abstract class Person : ICloneable, IEquatable<Person>
     {
         private const string DEFAULT_FIRST_NAME = "John";
         private const string DEFAULT_LAST_NAME = "Doe";
@@ -80,6 +81,11 @@ namespace Team.People
         public int Age()
         {
             return DateTime.Now.Year - birthdate.Year;
+        }
+
+        public bool Equals(Person other)
+        {
+            return Pesel == other.Pesel;
         }
 
         public override string ToString()

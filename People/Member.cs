@@ -2,6 +2,7 @@ using System;
 
 namespace Team.People
 {
+    [Serializable]
     public class Member : Person, IComparable<Member>
     {
         private const string DEFAULT_REGISTRATION_DATE = "2002-01-01";
@@ -23,6 +24,11 @@ namespace Team.People
             {
                 return position;
             }
+        }
+
+        private Member()
+            : base()
+        {
         }
 
         public Member(

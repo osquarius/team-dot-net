@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Team xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Grupa IT</Name>
+  <CurrentManager>
+    <FirstName>Adam</FirstName>
+    <LastName>Kowalski</LastName>
+    <Birthdate>1990-07-01T00:00:00</Birthdate>
+  </CurrentManager>
+</Team>

@@ -1,10 +1,18 @@
+using System;
+
 namespace Team.People
 {
+    [Serializable]
     public class Manager : Person
     {
         private const int DEFAULT_EXPERIENCE = 0;
 
         private int experience;
+
+        private Manager()
+            : base()
+        {
+        }
 
         public Manager(
             string firstName,
